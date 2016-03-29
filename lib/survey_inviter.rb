@@ -12,16 +12,15 @@
 # responsibilities 3 and 4. Create a new class to perform these tasks, and call
 # it from this one.
 class SurveyInviter
-  EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 
   def initialize(attributes = {})
     @survey = attributes[:survey]
     @message = attributes[:message] || ''
-    @recipients = attributes[:recipients] || ''
+    @email = Email.new(attributes)
     @sender = attributes[:sender]
   end
 
-  attr_reader :message, :recipients, :survey
+  attr_reader :message, :survey
 
   def valid?
     valid_message? && valid_recipients?
@@ -39,14 +38,6 @@ class SurveyInviter
     end
   end
 
-  def invalid_recipients
-    @invalid_recipients ||= recipient_list.map do |item|
-      unless item.match(EMAIL_REGEX)
-        item
-      end
-    end.compact
-  end
-
   private
 
   def valid_message?
@@ -54,10 +45,10 @@ class SurveyInviter
   end
 
   def valid_recipients?
-    invalid_recipients.empty?
+    @email.valid_recipients?
   end
 
   def recipient_list
-    @recipient_list ||= @recipients.gsub(/\s+/, '').split(/[\n,;]+/)
+    @email.recipient_list
   end
 end
