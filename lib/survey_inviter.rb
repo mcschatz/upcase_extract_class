@@ -16,7 +16,7 @@ class SurveyInviter
   def initialize(attributes = {})
     @survey = attributes[:survey]
     @message = attributes[:message] || ''
-    @email = Email.new(attributes)
+    @email = EmailBuilder.new(attributes)
     @sender = attributes[:sender]
   end
 

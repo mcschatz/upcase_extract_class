@@ -1,5 +1,7 @@
-class Email
+class EmailBuilder
   EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
+  WHITESPACE = /\s+/
+  DELIMITERS = /[\n,;]+/
 
   def initialize(attributes)
     @recipients = attributes[:recipients] || ''
@@ -14,7 +16,7 @@ class Email
   end
 
   def recipient_list
-    @recipients.gsub(/\s+/, '').split(/[\n,;]+/)
+    @recipients.gsub(WHITESPACE, '').split(DELIMITERS)
   end
 
   def valid_recipients?
